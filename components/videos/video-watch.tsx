@@ -6,10 +6,14 @@ import {
 } from "@/components/ui/dialog";
 import Par from "../typhography/par";
 import { Separator } from "../ui/separator";
-import { Copy, Triangle, Youtube } from "lucide-react";
+import { Triangle, Youtube } from "lucide-react";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import QRCode from "./qr-code";
+import CopyInput from "./copy-input";
+import { ScrollArea } from "../ui/scroll-area";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "../ui/button";
 
 export default function WatchVideo({
   title,
@@ -26,43 +30,37 @@ export default function WatchVideo({
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription className="text-foreground">
           {/* VIDEO DESC */}
-          <Par>{description}</Par>
-          <Separator className="mb-4" />
+          <ScrollArea className="max-h-[40vw] overflow-scroll">
+            <Par>{description}</Par>
+          </ScrollArea>
+          <Separator className="my-4" />
           {/* WATCH THE VIDEO BTN */}
-          <div className="flex items-center justify-between p-2 m-auto mb-0 rounded-sm gap-2 bg-primary w-fit text-slate-100 ">
+          <Link
+            href={link}
+            className={cn(
+              buttonVariants(),
+              "flex items-center justify-between p-2 m-auto mb-0 rounded-sm gap-2 bg-primary w-fit text-slate-100"
+            )}
+          >
+            {" "}
             <Par>Guarda il video</Par>
             <Youtube />
-          </div>
+          </Link>
           <Triangle
-            className="m-auto mb-1 -mt-2 rotate-180"
-            fill="#dc2627"
+            className="m-auto mb-1 -mt-2 rotate-180 fill-primary hover:fill-primary/90 "
             strokeWidth={0}
           />
           {/* QR CODE */}
-          <img
-            src="https://cdn.britannica.com/17/155017-050-9AC96FC8/Example-QR-code.jpg"
-            className="m-auto w-[50%] border-8 rounded-sm border-primary mb-8"
-          />
+          <div className="m-auto w-[316px] border-8 rounded-sm border-primary mb-8 ">
+            <QRCode link={link} />
+          </div>
           {/* COPY TO CLIPBOARD*/}
           <Label htmlFor="link">
             <Par className="mb-2 text-center">
               Scansiona il QR code oppure copia il link:
             </Par>
           </Label>
-          <div className="w-[60%] m-auto relative">
-            <Input
-              readOnly
-              placeholder="https://youtube.com/..."
-              className="m-auto"
-              id="link"
-            />
-            <Button
-              className="absolute top-0 right-0 border border-l-0 rounded-s-none"
-              variant="secondary"
-            >
-              <Copy />
-            </Button>
-          </div>
+          <CopyInput link={link} />
         </DialogDescription>
       </DialogHeader>
     </DialogContent>
