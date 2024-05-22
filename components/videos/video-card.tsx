@@ -37,7 +37,7 @@ export default function VideoCard({
             />
           </CardHeader>
           {/* HIDDEN STUFF, DESCRIPTION, WATCH AND LIKE STATE */}
-          <div className="absolute bottom-0 w-full overflow-scroll h-[203px] rounded-lg opacity-0 transition-all duration-300 group-hover:opacity-100 bg-muted/80">
+          <div className="absolute bottom-0 w-full  h-[203px] rounded-lg opacity-0 transition-all duration-300 group-hover:opacity-100 bg-muted/80">
             <CardContent className="p-4 rounded-t-lg flex flex-col justify-between h-full bg-muted/80">
               {/* QUICK DESCR */}
               <CardDescription className="mb-4 text-justify text-muted-foreground">

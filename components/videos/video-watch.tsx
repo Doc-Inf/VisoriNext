@@ -30,7 +30,7 @@ export default function WatchVideo({
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription className="text-foreground">
           {/* VIDEO DESC */}
-          <ScrollArea className="max-h-[40vw] overflow-scroll">
+          <ScrollArea className="max-h-[40vw] overflow-auto">
             <Par>{description}</Par>
           </ScrollArea>
           <Separator className="my-4" />

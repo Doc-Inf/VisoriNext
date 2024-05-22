@@ -34,7 +34,7 @@ export default function Category({
     >
       <Collapsible open={categoryOpen} onOpenChange={setCategoryOpen}>
         <div className="flex items-center space-x-4 w-[85%] h-16 m-auto">
-          <TextLG>{name}</TextLG>
+          <TextLG className="first-letter:capitalize">{name}</TextLG>
           <CollapsibleTrigger asChild>
             <Button variant="ghost">
               <motion.div
