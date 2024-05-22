@@ -9,67 +9,22 @@ import {
 import TextLG from "../typhography/textLG";
 import { Button } from "../ui/button";
 import { ChevronDown } from "lucide-react";
-import VideoCarousel from "./video-caro";
 import VideoCard from "./video-card";
-export default function Category({ name }: { name: string }) {
+import { ClientVideo } from "@/constants/types";
+
+export default function Category({
+  name,
+  videos,
+}: {
+  name: string;
+  videos: ClientVideo[];
+}) {
   const [categoryOpen, setCategoryOpen] = useState(true);
 
   const categoryVariant = {
     open: { rotate: 180 },
     closed: { rotate: 0 },
   };
-
-  // TODO: Fetch videos
-  const videos = [
-    {
-      title: "Titiolo video",
-      description: "Descrizione video",
-      link: "https://www.youtube.com",
-      thumbnail:
-        "https://i.ytimg.com/vi/hEdzv7D4CbQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCggPxA9ggUsMAhXCfGRl8ahmV4pQ",
-      categories: ["Argomento 1", "Argomento 2"],
-    },
-    {
-      title: "Titiolo video",
-      description: "Descrizione video",
-      link: "https://www.youtube.com",
-      thumbnail:
-        "https://i.ytimg.com/vi/FPiZ7z6lU54/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEv9B2SreeOLvmVUGmI9OjI1Ugow",
-      categories: ["Argomento 1", "Argomento 2"],
-    },
-    {
-      title: "Titiolo video",
-      description: "Descrizione video",
-      link: "https://www.youtube.com",
-      thumbnail:
-        "https://i.ytimg.com/vi/ZvZ7da8JBUk/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCj25_c-1-g7JawtfmEXRADWpCQNQ",
-      categories: ["Argomento 1", "Argomento 2"],
-    },
-    {
-      title: "Titiolo video",
-      description: "Descrizione video",
-      link: "https://www.youtube.com",
-      thumbnail:
-        "https://i.ytimg.com/vi/sPyAQQklc1s/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLArrvFaLETjv_3WSloUwMlA8S0wjw",
-      categories: ["Argomento 1", "Argomento 2"],
-    },
-    {
-      title: "Titolo video",
-      description: "Descrizione video",
-      link: "https://www.youtube.com",
-      thumbnail:
-        "https://i.ytimg.com/vi/kQzjlHYeTCg/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCbIX6BhKxgK_KUwpxU4r9FgULwYg",
-      categories: ["Argomento 1", "Argomento 2"],
-    },
-    {
-      title: "Titolo video",
-      description: "Descrizione video",
-      link: "https://www.youtube.com",
-      thumbnail:
-        "https://i.ytimg.com/vi/rG4jSz_2HDY/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCg1r4d8-QAyv_9LqhxV8N_OXQk2A",
-      categories: ["Argomento 1", "Argomento 2"],
-    },
-  ];
 
   return (
     <motion.div
@@ -92,11 +47,15 @@ export default function Category({ name }: { name: string }) {
           </CollapsibleTrigger>
         </div>
         <CollapsibleContent>
-          <VideoCarousel>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(360px,1fr))] gap-y-4  m-auto">
             {videos.map((video, idx) => (
-              <VideoCard key={idx} {...video} />
+              <VideoCard
+                key={idx}
+                {...video}
+                categories={["Categ 1", "Categ 2"]}
+              />
             ))}
-          </VideoCarousel>
+          </div>
         </CollapsibleContent>
       </Collapsible>
     </motion.div>
