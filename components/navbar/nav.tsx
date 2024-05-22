@@ -17,7 +17,7 @@ export default function Navbar() {
   const handleMenu = () => setMenu((prev) => !prev);
 
   return (
-    <nav className="w-full border border-border">
+    <nav className="fixed top-0 z-50 w-screen border backdrop-blur-sm bg-background/90 border-zinc-700/45">
       {/* CONTAINER */}
       <div className="flex items-center justify-between px-4 py-2 md:px-10 max-max-w-screen-md">
         {/* LOGO */}
