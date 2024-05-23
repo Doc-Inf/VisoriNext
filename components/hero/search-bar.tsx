@@ -12,12 +12,29 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
+import { cn } from "@/lib/utils";
 
 export default function SearchBar({
-  selected,
+  subjects,
+  topics,
 }: {
-  selected: { materia: string; argomento: string };
+  subjects: string[];
+  topics: Map<string, Set<string>>;
 }) {
+  console.log(subjects);
+  const [open, setOpen] = useState({ subj: false, topic: false });
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -42,57 +59,173 @@ export default function SearchBar({
   return (
     <>
       <TextLG className="mb-4 text-center">Cerca nella videoteca</TextLG>
-      <div className="m-auto space-x-2 items-center justify-center flex w-[80%] max-w-screen-md mb-8">
-        <Select
-          onValueChange={(curr) => handleRouting(curr, "materia")}
-          value={selected.materia || "all"}
+      <div className="m-auto space-x-2 items-center justify-center flex w-[80%] max-w-screen-md mb-4">
+        <Popover
+          open={open.subj}
+          onOpenChange={(state: boolean) => setOpen({ ...open, subj: state })}
         >
-          <SelectTrigger className="w-[280px] rounded-xl shadow-md shadow-input dark:shadow-none">
-            <SelectValue placeholder="Materia" className="text-white" />
-            <p className="sr-only">Materia da cercare </p>
-          </SelectTrigger>
-          <SelectContent className="w-[280px] rounded-xl  shadow-input dark:shadow-none  pb-3">
-            <SelectGroup className="px-2">
-              <SelectLabel className="-px-1">Materia</SelectLabel>
-              <SelectItem className="text-md" value="all">
-                Tutte
-              </SelectItem>
-              <SelectItem className="text-md" value="biologia">
-                Biologia
-              </SelectItem>
-              <SelectItem className="text-md" value="chimica">
-                Chimica
-              </SelectItem>
-              <SelectItem className="text-md" value="scienze della terra">
-                Scienze della Terra
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open.subj}
+              className="w-[200px] justify-between rounded-xl"
+            >
+              {searchParams.get("materia")
+                ? (function () {
+                    const subj = subjects.find(
+                      (subj) => subj === searchParams.get("materia")
+                    );
+                    return subj && subj[0].toUpperCase() + subj.slice(1);
+                  })()
+                : "Seleziona la materia..."}
+              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0 rounded-lg">
+            <Command>
+              <CommandInput
+                placeholder="Seleziona la materia..."
+                className="h-9"
+              />
+              <CommandEmpty>Nessuna materia trovata...</CommandEmpty>
+              <CommandGroup>
+                {subjects.map((subj) => (
+                  <CommandItem
+                    key={subj}
+                    value={subj}
+                    onSelect={(currentValue) => {
+                      setOpen({ ...open, subj: false });
+                      if (currentValue === searchParams.get("materia")) return;
+                      handleRouting(currentValue, "materia");
+                    }}
+                  >
+                    {subj === "all"
+                      ? "Tutte le materie"
+                      : subj[0].toUpperCase() + subj.slice(1)}
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        searchParams.get("materia") === subj ||
+                          (!searchParams.get("materia") && subj === "all")
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+                <CommandList></CommandList>
+              </CommandGroup>
+            </Command>
+          </PopoverContent>
+        </Popover>
 
-        <Select
-          onValueChange={(curr) => handleRouting(curr, "argomento")}
-          value={selected.argomento || "all"}
+        <Popover
+          open={open.topic}
+          onOpenChange={(state: boolean) => setOpen({ ...open, topic: state })}
         >
-          <SelectTrigger className="w-[280px] rounded-xl shadow-md shadow-input dark:shadow-none">
-            <SelectValue placeholder="Argomento" className="text-white" />
-            <p className="sr-only">Argomento da cercare </p>
-          </SelectTrigger>
-          <SelectContent className="w-[280px] rounded-xl  shadow-input dark:shadow-none  pb-3">
-            <SelectGroup className="px-2">
-              <SelectLabel className="-px-1">Argomento</SelectLabel>
-              <SelectItem className="text-md" value="all">
-                Tutti
-              </SelectItem>
-              <SelectItem className="text-md" value="cellula">
-                Cellula
-              </SelectItem>
-              <SelectItem className="text-md" value="terremoto">
-                Terremoto
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open.topic}
+              className="w-[200px] justify-between rounded-xl"
+            >
+              {searchParams.get("argomento")
+                ? (function () {
+                    const topicSet = topics.get(
+                      searchParams.get("materia") || "all"
+                    );
+                    if (!topicSet) return "Seleziona l'argomento...";
+                    for (const topic of topicSet) {
+                      if (topic === searchParams.get("argomento"))
+                        return topic[0].toUpperCase() + topic.slice(1);
+                    }
+                    return "Seleziona l'argomento...";
+                  })()
+                : "Seleziona l'argomento..."}
+              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[200px] p-0 rounded-lg">
+            <Command>
+              <CommandInput
+                placeholder="Seleziona  l'argomento..."
+                className="h-9"
+              />
+              <div className="max-h-[150px] overflow-y-scroll">
+                <CommandEmpty>Nessun argomento trovato...</CommandEmpty>
+                <CommandGroup>
+                  <CommandItem
+                    value={"all"}
+                    onSelect={() => {
+                      setOpen({ ...open, topic: false });
+                      handleRouting("all", "argomento");
+                    }}
+                  >
+                    Tutti gli argomenti
+                    <CheckIcon
+                      className={cn(
+                        "ml-auto h-4 w-4",
+                        searchParams.get("argomento") === null
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                    />
+                  </CommandItem>
+                </CommandGroup>
+
+                {[...topics.keys()].map(
+                  (subj) =>
+                    (searchParams.get("materia") === subj ||
+                      searchParams.get("materia") === null) && (
+                      <CommandGroup
+                        heading={subj[0].toUpperCase() + subj.slice(1)}
+                        key={subj}
+                      >
+                        {[...(topics.get(subj)?.values() || [])].map(
+                          (topic) => (
+                            <CommandItem
+                              key={topic}
+                              value={topic}
+                              onSelect={(currentValue) => {
+                                setOpen({ ...open, topic: false });
+                                if (
+                                  currentValue === searchParams.get("argomento")
+                                )
+                                  return;
+                                router.push(
+                                  `/?${new URLSearchParams({
+                                    materia: subj,
+                                    argomento: currentValue,
+                                  }).toString()}`,
+                                  {
+                                    scroll: false,
+                                  }
+                                );
+                              }}
+                            >
+                              {topic[0].toUpperCase() + topic.slice(1)}
+                              <CheckIcon
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  searchParams.get("argomento") === topic
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          )
+                        )}
+                      </CommandGroup>
+                    )
+                )}
+                <CommandList />
+              </div>
+            </Command>
+          </PopoverContent>
+        </Popover>
+
         <Button className="rounded-xl">
           <Search />
         </Button>
