@@ -12,6 +12,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import WatchVideo from "./video-watch";
+import Image from "next/image";
 
 export default function VideoCard({
   title,
@@ -23,14 +24,16 @@ export default function VideoCard({
   categories: string[];
 }) {
   return (
-    <Dialog>
+    <Dialog modal={true}>
       <Card className="relative border group bg-card w-[360px] m-auto">
         {/* HOVER BG / FALLBACK */}
         <div className="w-full rounded-lg bg-gradient-to-r from-red-900 via-red-500 to-orange-500 p-[0px]">
           {/* IMG */}
           <CardHeader className="relative p-0">
-            <img
+            <Image
               src={thumbnail}
+              height={0}
+              width={360}
               alt="Movie image"
               className="w-[360px] 
             h-[203px] object-cover bg-center rounded-t-lg group-hover:opacity-50"

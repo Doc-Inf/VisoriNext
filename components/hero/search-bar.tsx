@@ -14,7 +14,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon, CheckIcon, ResetIcon } from "@radix-ui/react-icons";
 import {
   Command,
   CommandEmpty,
@@ -24,6 +24,7 @@ import {
   CommandList,
 } from "../ui/command";
 import { cn } from "@/lib/utils";
+import TooltipHeader from "../tooltip-header";
 
 export default function SearchBar({
   subjects,
@@ -59,7 +60,7 @@ export default function SearchBar({
   return (
     <>
       <TextLG className="mb-4 text-center">Cerca nella videoteca</TextLG>
-      <div className="m-auto space-x-2 items-center justify-center flex w-[80%] max-w-screen-md mb-4">
+      <div className="m-auto md:space-x-2 md:items-center md:justify-center md:flex  gap-y-4 md:w-[80%] max-w-screen-md mb-4 grid justify-center">
         <Popover
           open={open.subj}
           onOpenChange={(state: boolean) => setOpen({ ...open, subj: state })}
@@ -69,7 +70,7 @@ export default function SearchBar({
               variant="outline"
               role="combobox"
               aria-expanded={open.subj}
-              className="w-[200px] justify-between rounded-xl"
+              className="w-[250px]  justify-between rounded-xl"
             >
               {searchParams.get("materia")
                 ? (function () {
@@ -82,7 +83,7 @@ export default function SearchBar({
               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0 rounded-lg">
+          <PopoverContent className="w-[250px] p-0 rounded-lg">
             <Command>
               <CommandInput
                 placeholder="Seleziona la materia..."
@@ -129,7 +130,7 @@ export default function SearchBar({
               variant="outline"
               role="combobox"
               aria-expanded={open.topic}
-              className="w-[200px] justify-between rounded-xl"
+              className="w-[250px] justify-between rounded-xl"
             >
               {searchParams.get("argomento")
                 ? (function () {
@@ -147,7 +148,7 @@ export default function SearchBar({
               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0 rounded-lg">
+          <PopoverContent className="w-[250px] p-0 rounded-lg">
             <Command>
               <CommandInput
                 placeholder="Seleziona  l'argomento..."
@@ -174,7 +175,6 @@ export default function SearchBar({
                     />
                   </CommandItem>
                 </CommandGroup>
-
                 {[...topics.keys()].map(
                   (subj) =>
                     (searchParams.get("materia") === subj ||
@@ -226,9 +226,14 @@ export default function SearchBar({
           </PopoverContent>
         </Popover>
 
-        <Button className="rounded-xl">
-          <Search />
-        </Button>
+        <TooltipHeader text="Cancella i filtri">
+          <Button
+            className="rounded-xl"
+            onClick={() => router.push("/", { scroll: false })}
+          >
+            <ResetIcon />
+          </Button>
+        </TooltipHeader>
       </div>
     </>
   );
