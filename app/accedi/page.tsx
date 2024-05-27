@@ -1,56 +1,130 @@
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
+"use client";
 
-export default function page() {
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "@/schemas";
+import FormWrapper from "@/components/form/form-wrapper";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import FormError from "@/components/form/state/formError";
+import FormSuccess from "@/components/form/state/formSuccess";
+import FormLoader from "@/components/form/state/formLoader";
+import { deleteCookie, setCookie } from "cookies-next";
+import { decryptJWT, encryptJWT } from "@/lib/jwt/";
+import { login } from "@/lib/auth";
+
+export default function LoginForm() {
+  const router = useRouter();
+
+  const [err, setErr] = useState<string | undefined>("");
+  const [succ, setSucc] = useState<string | undefined>("");
+  const [isPending, setIsPending] = useState(false);
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+    setIsPending(true);
+    setErr("");
+    setSucc("");
+
+    try {
+      const res = await login(values);
+
+      if (res instanceof Error) {
+        setErr(res.message);
+        throw res;
+      }
+
+      router.replace("/");
+    } catch (error) {
+      console.log(error);
+    }
+    setIsPending(false);
+  };
+
   return (
-    <div>
-      <Card className="absolute top-1/2 -translate-y-1/2 space-y-2 left-1/2 -translate-x-1/2 w-[90%] md:w-[60%] max-w-screen-md">
-        <CardHeader>
-          <CardTitle className="m-auto text-4xl">Accedi</CardTitle>
-          <CardDescription className="text-justify text-pretty text-md md:text-center">
-            Bentornato, inserisci le tue credenziali per accedere
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="space-y-1">
-            <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" placeholder="example@gmail.com" />
-          </div>
-          <div className="space-y-1">
-            <Label htmlFor="password">Password</Label>
-            <Input type="password" id="password" placeholder="*******" />
-          </div>
-          <div className="flex items-center gap-4 pt-4">
-            <label htmlFor="remember">Rimani connesso</label>
-            <Checkbox id="remember" />
-          </div>
-        </CardContent>
-        <CardFooter className="flex flex-col gap-8 pb-4">
-          <Button className="w-full">Log in</Button>
-          <p className="text-sm text-muted-foreground">
-            Non sei ancora registrato?
-            <Link
-              href="/registrati"
-              className={`${buttonVariants({
-                variant: "link",
-              })} text-slate-700 dark:text-slate-300 `}
-            >
-              Registrati
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
-    </div>
+    <FormWrapper
+      title="Accedi 🔐"
+      desc="Bentornato, inserisci qui le tue credenziali per accedere al tuo account"
+      sub="Non hai un account?"
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="email@email.com"
+                    {...field}
+                    type="email"
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>Email dell&apos;account</FormDescription>
+              </FormItem>
+            )}
+          ></FormField>
+
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="******"
+                    {...field}
+                    type="password"
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>Password dell&apos;account</FormDescription>
+              </FormItem>
+            )}
+          ></FormField>
+
+          <FormError message={err} />
+          <FormSuccess message={succ} />
+          <FormLoader loading={isPending} />
+
+          <Button type="submit" disabled={isPending} className="w-full">
+            Accedi
+          </Button>
+          {/*  ⚠️ TODO REMOVE */}
+          <Button
+            type="button"
+            disabled={isPending}
+            onClick={async () => console.log(await decryptJWT())}
+            className="w-full"
+          >
+            ⚠️ SEE CURRENT DECRYPTED JWT
+          </Button>
+        </form>
+      </Form>
+    </FormWrapper>
   );
 }
