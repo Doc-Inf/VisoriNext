@@ -24,6 +24,7 @@ import { useToast } from "../ui/use-toast";
 import FormError from "./state/formError";
 import FormSuccess from "./state/formSuccess";
 import FormLoader from "./state/formLoader";
+import { isAuthenticated } from "@/lib/auth";
 
 export default function FormVideo({
   subjects,
@@ -56,8 +57,35 @@ export default function FormVideo({
     setErr("");
     setSucc("");
 
+    // should not happen with the route provider
+    if (!isAuthenticated()) {
+      toast({
+        variant: "destructive",
+        title: "Errore nella creazione del video",
+        description: "Devi essere autenticato per creare un video",
+      });
+      setErr("Devi essere autenticato per creare un video");
+      setIsPending(false);
+      return;
+    }
+
     try {
-      // TODO: check for auth
+      // TODO: export to lib
+      const videoRes = await fetch("/api/get-video", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: values.url }),
+      });
+      const videoData = await videoRes.json();
+      const {
+        title: titolo,
+        description: descrizione,
+        channelTitle: autore,
+      } = videoData.items[0].snippet;
+
+      // TODO: check for auth, create video with values
       const res: Response = await fetch(
         "https://jsonplaceholder.typicode.com/todos/1"
         /*"/api/video", {
@@ -98,7 +126,8 @@ export default function FormVideo({
     } catch (e) {
       console.log(e);
     }
-    console.log(values);
+
+    setIsPending(false);
   };
 
   return (
