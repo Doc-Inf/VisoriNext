@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     const { url } = await req.json();
 
     const res = await fetch(
-      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${url}&key=AIzaSyCfEsQjx017WhnLBCiOC7EyPE_N_JtpCz8`,
+      `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${url}&key=${process.env.YT_API_KEY}`,
       { method: "GET", headers: { "Content-Type": "application/json" } }
     );
     const data = await res.json();
