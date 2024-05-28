@@ -33,7 +33,6 @@ export default function SearchBar({
   subjects: string[];
   topics: Map<string, Set<string>>;
 }) {
-  console.log(subjects);
   const [open, setOpen] = useState({ subj: false, topic: false });
 
   const router = useRouter();

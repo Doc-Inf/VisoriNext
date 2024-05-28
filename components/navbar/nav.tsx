@@ -1,13 +1,12 @@
 "use client";
-import { Search, Videotape } from "lucide-react";
+import { Videotape } from "lucide-react";
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
+import { Button } from "../ui/button";
 import { ModeToggle } from "../mode-toggle";
-import { cn } from "@/lib/utils";
 import TextMD from "../typhography/textMD";
-import { Input } from "../ui/input";
 import { useState } from "react";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import NavAuth from "./navAuth";
 
 export default function Navbar() {
   /* SM MENU */
@@ -29,18 +28,8 @@ export default function Navbar() {
         {/* NAV */}
         <div className="items-center hidden space-x-2 md:flex">
           <ModeToggle />
-          <Link
-            className={buttonVariants({ variant: "outline" })}
-            href="/accedi"
-          >
-            Accedi
-          </Link>
-          <Link
-            className={cn("bg-primary", buttonVariants({ variant: "default" }))}
-            href="/registrati"
-          >
-            Registrati
-          </Link>
+
+          <NavAuth />
         </div>
         {/* MOBILE */}
         <div className="flex items-center md:hidden">
@@ -62,19 +51,7 @@ export default function Navbar() {
       >
         {/* SEARCH BAR AND LOG IN BTNS */}
         <div className="flex max-w-md m-auto space-x-2">
-          {/* LOGIN BTNS */}
-          <Link
-            className={buttonVariants({ variant: "outline" })}
-            href="/accedi"
-          >
-            Accedi
-          </Link>
-          <Link
-            className={cn("bg-primary", buttonVariants({ variant: "default" }))}
-            href="/registrati"
-          >
-            Registrati
-          </Link>
+          <NavAuth />
         </div>
       </div>
     </nav>

@@ -21,8 +21,7 @@ import { useRouter } from "next/navigation";
 import FormError from "@/components/form/state/formError";
 import FormSuccess from "@/components/form/state/formSuccess";
 import FormLoader from "@/components/form/state/formLoader";
-import { deleteCookie, setCookie } from "cookies-next";
-import { decryptJWT, encryptJWT } from "@/lib/jwt/";
+import { decryptJWT } from "@/lib/jwt/";
 import { login } from "@/lib/auth";
 
 export default function LoginForm() {
@@ -53,8 +52,10 @@ export default function LoginForm() {
       }
 
       router.replace("/");
+      router.refresh();
     } catch (error) {
-      console.log(error);
+      // @ts-ignore TODO: fix
+      error.message !== "Credenziali non valide" && console.log(error);
     }
     setIsPending(false);
   };

@@ -1,4 +1,4 @@
-import { deleteCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, setCookie } from "cookies-next";
 import { encryptJWT } from "../jwt";
 
 export async function login({
@@ -9,38 +9,44 @@ export async function login({
   password: string;
 }) {
   // TODO: check for auth
-  const res = await fetch(
-    "https://jsonplaceholder.typicode.com/todos/1" /* "x", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,}),
-      }*/
-  );
+  const res = await fetch("api/auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
 
-  if (res.status === 401) return new Error("Credenziali non valide");
-
-  if (!res.ok)
+  if (!res.ok && res.status !== 403)
     return new Error("Impossibile effettuare il login, riprova più tardi");
+
+  const { sessionID, access } = await res.json();
+  if (access !== "granted") return new Error("Credenziali non valide");
 
   // create token
   // expires in 10 days
   const expires = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000);
 
+  /* with JWT
   const token = await encryptJWT({
     user: {
-      email,
+      nome,
+      cognome,
+      email: emailWS,
+      sessionID,
     },
     expires,
   });
+*/
 
-  setCookie("session", token, { expires });
-  return token;
+  setCookie("session", sessionID, { expires });
+  return sessionID;
 }
 
-export async function logout() {
+export function logout() {
   return deleteCookie("session");
+}
+
+export function isAuthenticated() {
+  return !!getCookie("session");
 }
