@@ -17,7 +17,7 @@ export default function Heading() {
         <TextMD>Più di ... video</TextMD>
       </Badge>
       <TextXL className="text-4xl md:text-6xl">Videoteca Visori 360º</TextXL>
-      <Par className="md:px-10 px-5 text-sm md:text-lg text-muted-foreground">
+      <Par className="px-5 text-sm md:px-10 md:text-lg text-muted-foreground">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt quia
         veniam nesciunt, aspernatur labore aliquam ipsam illum quisquam.
       </Par>

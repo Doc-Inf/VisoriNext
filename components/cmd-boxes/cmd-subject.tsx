@@ -41,10 +41,10 @@ export default function CmdSubject({
                 return subj && subj[0].toUpperCase() + subj.slice(1);
               })()
             : "Seleziona la materia..."}
-          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <CaretSortIcon className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className=" p-0 rounded-lg">
+      <PopoverContent className="p-0 rounded-lg ">
         <Command>
           <CommandInput placeholder="Seleziona la materia..." className="h-9" />
           <CommandEmpty>Nessuna materia trovata...</CommandEmpty>

@@ -79,7 +79,7 @@ export default function SearchBar({
                     return subj && subj[0].toUpperCase() + subj.slice(1);
                   })()
                 : "Seleziona la materia..."}
-              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <CaretSortIcon className="w-4 h-4 ml-2 opacity-50 shrink-0" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[250px] p-0 rounded-lg">
@@ -144,7 +144,7 @@ export default function SearchBar({
                     return "Seleziona l'argomento...";
                   })()
                 : "Seleziona l'argomento..."}
-              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              <CaretSortIcon className="w-4 h-4 ml-2 opacity-50 shrink-0" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[250px] p-0 rounded-lg">

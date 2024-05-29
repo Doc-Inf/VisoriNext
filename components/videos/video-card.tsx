@@ -41,13 +41,13 @@ export default function VideoCard({
           </CardHeader>
           {/* HIDDEN STUFF, DESCRIPTION, WATCH AND LIKE STATE */}
           <div className="absolute bottom-0 w-full  h-[203px] rounded-lg opacity-0 transition-all duration-300 group-hover:opacity-100 bg-muted/80">
-            <CardContent className="p-4 rounded-t-lg flex flex-col justify-between h-full bg-muted/80">
+            <CardContent className="flex flex-col justify-between h-full p-4 rounded-t-lg bg-muted/80">
               {/* QUICK DESCR */}
               <CardDescription className="mb-4 text-justify text-muted-foreground">
                 {description.split(" ").slice(0, 30).join(" ")}{" "}
               </CardDescription>
               {/* WATCH AND LIKE */}
-              <div className="flex items-center mb-0 justify-between">
+              <div className="flex items-center justify-between mb-0">
                 <DialogTrigger asChild>
                   <Button>Guarda</Button>
                 </DialogTrigger>
@@ -69,7 +69,7 @@ export default function VideoCard({
             {/* ALWAYS SHOWN */}
           </div>
           <CardFooter className="flex flex-wrap items-center justify-between p-4 rounded-b-lg bg-muted border-t-slate-200">
-            <CardTitle className="text-xl font-semibold whitespace-nowrap overflow-hidden">
+            <CardTitle className="overflow-hidden text-xl font-semibold whitespace-nowrap">
               {title}
             </CardTitle>
           </CardFooter>

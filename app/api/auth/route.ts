@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
 
-    const body = new FormData();
+    const body = new URLSearchParams();
     body.append("email", email);
     body.append("password", password);
     const res = await fetch(
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `email=${email}&password=${password}`,
+        body: body.toString(),
       }
     );
 

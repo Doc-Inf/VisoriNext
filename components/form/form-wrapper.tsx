@@ -26,7 +26,7 @@ export default function FormWrapper({
       <Card className="w-[calc(100vw - 4rem)] max-w-screen-md mx-auto">
         <CardHeader>
           <CardTitle className="text-4xl text-center">{title}</CardTitle>
-          <TextMD className="pt-2 mt-4 text-sm text-center md:text-md text-muted-foreground font-medium">
+          <TextMD className="pt-2 mt-4 text-sm font-medium text-center md:text-md text-muted-foreground">
             {desc}
           </TextMD>
         </CardHeader>

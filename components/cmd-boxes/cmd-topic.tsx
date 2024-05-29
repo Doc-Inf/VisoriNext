@@ -49,7 +49,7 @@ export default function CmdTopic({
                 return "Seleziona l'argomento...";
               })()
             : "Seleziona l'argomento..."}
-          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <CaretSortIcon className="w-4 h-4 ml-2 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 rounded-lg">
