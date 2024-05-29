@@ -3,13 +3,13 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
 import { getCookie } from "cookies-next";
-import { logout } from "@/lib/auth";
+import { isAuthenticated, logout } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 
 export default function NavAuth() {
   const router = useRouter();
-  const sessionID = getCookie("session");
-  return !sessionID ? (
+  const loggedIn = isAuthenticated();
+  return !loggedIn ? (
     <>
       <Link className={buttonVariants({ variant: "outline" })} href="/accedi">
         Accedi

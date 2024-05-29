@@ -1,5 +1,4 @@
 import { deleteCookie, getCookie, setCookie } from "cookies-next";
-import { encryptJWT } from "../jwt";
 
 export async function login({
   email,
@@ -39,14 +38,14 @@ export async function login({
   });
 */
 
-  setCookie("session", sessionID, { expires });
+  setCookie("PHPSESSID", sessionID, { expires });
   return sessionID;
 }
 
 export function logout() {
-  return deleteCookie("session");
+  return deleteCookie("PHPSESSID");
 }
 
 export function isAuthenticated() {
-  return !!getCookie("session");
+  return !!getCookie("PHPSESSID");
 }

@@ -12,7 +12,16 @@ const LoginSchema = z.object({
 
 const UserCreateForm = z.object({
   title: z.optional(z.string()),
+  desc: z.optional(z.string()),
+  author: z.optional(z.string()),
+  duration: z.string().min(1, { message: "Inserisci la durata" }),
+  img: z
+    .string()
+    .url({ message: "Inserisci un url valido" })
+    .optional()
+    .or(z.literal("")),
   url: z.string().url({ message: "Inserisci un url valido" }),
+  lang: z.string().min(1, { message: "Inserisci la lingua" }),
   subject: z.string().min(1, { message: "Inserisci la materia" }),
   topic: z.string().min(1, { message: "Inserisci l'argomento" }),
 });

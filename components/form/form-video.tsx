@@ -17,7 +17,7 @@ import { Button } from "../ui/button";
 import FormWrapper from "./form-wrapper";
 import { useState } from "react";
 import CmdSubject from "../cmd-boxes/cmd-subject";
-import { CirclePlus, MousePointerIcon } from "lucide-react";
+import { ChevronDown, CirclePlus, MousePointerIcon } from "lucide-react";
 import CmdTopic from "../cmd-boxes/cmd-topic";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 import { useToast } from "../ui/use-toast";
@@ -25,6 +25,12 @@ import FormError from "./state/formError";
 import FormSuccess from "./state/formSuccess";
 import FormLoader from "./state/formLoader";
 import { isAuthenticated } from "@/lib/auth";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { Textarea } from "../ui/textarea";
 
 export default function FormVideo({
   subjects,
@@ -33,6 +39,7 @@ export default function FormVideo({
   subjects: string[];
   topics: Map<any, any>;
 }) {
+  const [openOptional, setOpenOptional] = useState(false);
   const [err, setErr] = useState<string | undefined>("");
   const [succ, setSucc] = useState<string | undefined>("");
   const [isPending, setIsPending] = useState(false);
@@ -46,6 +53,11 @@ export default function FormVideo({
     resolver: zodResolver(UserCreateForm),
     defaultValues: {
       title: "",
+      desc: "",
+      author: "",
+      duration: "",
+      lang: "",
+      img: "",
       url: "",
       subject: "",
       topic: "",
@@ -83,22 +95,35 @@ export default function FormVideo({
         title: titolo,
         description: descrizione,
         channelTitle: autore,
+        thumbnails: {
+          medium: { url: image },
+        },
       } = videoData.items[0].snippet;
 
+      if (values.title === "") values.title = titolo;
+      if (values.desc === "") values.desc = descrizione;
+      if (values.author === "") values.author = autore;
+      if (values.img === "") values.img = image;
+
       // TODO: check for auth, create video with values
-      const res: Response = await fetch(
-        "https://jsonplaceholder.typicode.com/todos/1"
-        /*"/api/video", {
+      const res: Response = await fetch("/api/create-video", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),}*/
-      );
+        body: JSON.stringify(values),
+      });
 
       if (res.ok) {
         setSucc("Video creato con successo");
         form.reset();
+      } else if (res.status === 403) {
+        setErr("Accedi per creare un video");
+        toast({
+          variant: "destructive",
+          title: "Errore nella creazione del video",
+          description: "Devi essere autenticato per creare un video",
+        });
       } else if (res.status === 400) {
         setErr("Impossibile creare un video con i valori inseriti");
         toast({
@@ -133,39 +158,17 @@ export default function FormVideo({
   return (
     <FormWrapper
       title="Crea un nuovo video"
-      desc="Inserisci titolo, url, materia e argomenti per creare un nuovo video"
+      desc="Inserisci url, materia e argomenti per creare un nuovo video"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             disabled={isPending}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Titolo</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Inserisci il titolo del video"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Titolo opzionale del video, se non inserito lo titolo del
-                  video sarà generato automaticamente
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            disabled={isPending}
             name="url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Link al video * </FormLabel>
+                <FormLabel>Link al video</FormLabel>
                 <FormControl>
                   <Input placeholder="https://youtube.com/..." {...field} />
                 </FormControl>
@@ -178,12 +181,50 @@ export default function FormVideo({
           <FormField
             control={form.control}
             disabled={isPending}
+            name="lang"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Lingua</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Inserisci la lingua del video"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Lingua del video da creare</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            disabled={isPending}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Durata</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Inserisci la durata del video (hh:mm:ss)"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>Durata del video da creare</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            disabled={isPending}
             name="subject"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Materia * </FormLabel>
+                <FormLabel>Materia </FormLabel>
                 <FormControl>
-                  <div className="w-full flex justify-between">
+                  <div className="flex justify-between w-full">
                     <Input
                       placeholder="Nuova materia "
                       className={!create.subj ? "hidden" : "mr-2 rounded-xl"}
@@ -209,9 +250,9 @@ export default function FormVideo({
                     >
                       {!create.subj ? "Crea nuova" : "Seleziona materia"}
                       {!create.subj ? (
-                        <CirclePlus className="ms-2 h-4 w-4" />
+                        <CirclePlus className="w-4 h-4 ms-2" />
                       ) : (
-                        <MousePointerIcon className="ms-2 h-4 w-4" />
+                        <MousePointerIcon className="w-4 h-4 ms-2" />
                       )}
                     </Button>
                   </div>
@@ -230,9 +271,9 @@ export default function FormVideo({
             name="topic"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Argomento * </FormLabel>
+                <FormLabel>Argomento </FormLabel>
                 <FormControl>
-                  <div className="w-full flex justify-between">
+                  <div className="flex justify-between w-full">
                     <Input
                       placeholder="Argomento del video"
                       className={!create.topic ? "hidden" : "mr-2 rounded-xl"}
@@ -259,9 +300,9 @@ export default function FormVideo({
                     >
                       {!create.topic ? "Crea nuovo" : "Seleziona argomento"}
                       {!create.topic ? (
-                        <CaretSortIcon className="ms-2 h-4 w-4" />
+                        <CaretSortIcon className="w-4 h-4 ms-2" />
                       ) : (
-                        <MousePointerIcon className="ms-2 h-4 w-4" />
+                        <MousePointerIcon className="w-4 h-4 ms-2" />
                       )}{" "}
                     </Button>
                   </div>
@@ -274,12 +315,89 @@ export default function FormVideo({
             )}
           />
 
+          <Collapsible open={openOptional} onOpenChange={setOpenOptional}>
+            <CollapsibleTrigger className="flex w-[40%] gap-2 items-center">
+              Informazioni opzionali{" "}
+              <ChevronDown
+                className={`h-4 w-4 ${openOptional ? "rotate-180" : ""}`}
+              />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-8 space-y-8">
+              <FormField
+                control={form.control}
+                disabled={isPending}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Titolo</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Inserisci il titolo del video"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Titolo opzionale del video, se non inserito il titolo del
+                      video sarà generato automaticamente
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                disabled={isPending}
+                name="desc"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Descrizione</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Inserisci la descrizione del video"
+                        className="resize-none rounded-xl"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Desrizione opzionale del video, se non inserita la
+                      descrizione del video sarà generata automaticamente
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                disabled={isPending}
+                name="img"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>URL immagine</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Inserisci l'url dell'immagine del video"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Immagine opzionale del video, se non inserita
+                      l&apos;immagine del video sarà generata automaticamente
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CollapsibleContent>
+          </Collapsible>
+
           <FormError message={err} />
           <FormSuccess message={succ} />
           <FormLoader loading={isPending} />
 
-          <Button type="submit" className="w-full">
-            Crea
+          <Button type="submit" disabled={isPending} className="w-full">
+            Crea video
           </Button>
         </form>
       </Form>
