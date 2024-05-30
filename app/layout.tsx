@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Navbar from "@/components/navbar/nav";
 import { Toaster } from "@/components/ui/toaster";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -34,6 +35,8 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Toaster />
+
+          <ModeToggle className="fixed bottom-10 left-5" />
         </ThemeProvider>
       </body>
     </html>

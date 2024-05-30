@@ -24,19 +24,14 @@ export default function Navbar() {
           <Videotape className="text-primary" />
           <TextMD className="text-xl">Videoteca Visori 360</TextMD>
         </Link>
-
         {/* NAV */}
         <div className="items-center hidden space-x-2 md:flex">
-          <ModeToggle />
-
           <NavAuth />
         </div>
         {/* MOBILE */}
         <div className="flex items-center md:hidden">
           {/* THEME SWITCH FOR MOBILE */}
-          <div className="md:hidden me-4">
-            <ModeToggle />
-          </div>
+          <div className="md:hidden me-4"></div>
           <Button className="mobile-menu-button" onClick={handleMenu}>
             <HamburgerMenuIcon />
           </Button>
