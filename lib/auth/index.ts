@@ -11,7 +11,7 @@ export async function login({
   const body = new URLSearchParams();
   body.append("email", email);
   body.append("password", password);
-  const res = await fetch(`/php/auth.php`, {
+  const res = await fetch(`./php/auth.php`, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

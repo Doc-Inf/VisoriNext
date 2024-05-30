@@ -19,7 +19,7 @@ export default function NavAuth() {
   const loggedIn = isAuthenticated();
 
   return !loggedIn ? (
-    <Link className={buttonVariants({ variant: "default" })} href="/accedi">
+    <Link className={buttonVariants({ variant: "default" })} href="./accedi">
       Accedi
     </Link>
   ) : (
@@ -36,10 +36,10 @@ export default function NavAuth() {
           <DropdownMenuLabel>Il tuo account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link href="/nuovo-video">Nuovo video</Link>
+            <Link href="./nuovo-video">Nuovo video</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/nuovo-utente">Nuovo utente</Link>
+            <Link href="./nuovo-utente">Nuovo utente</Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem

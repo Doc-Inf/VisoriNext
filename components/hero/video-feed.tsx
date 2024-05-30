@@ -24,7 +24,7 @@ export default function VideoFeed() {
     selected.topic !== "all" &&
       searchParams.append("argomento", selected.topic);
 
-    fetch(`/php/datiHome.php?${searchParams.toString()}`, {
+    fetch(`./php/datiHome.php?${searchParams.toString()}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export default function VideoFeed() {
       )
       .catch((err) => console.log(err));
 
-    fetch("/php/datiHome.php?getMaterie", {
+    fetch("./php/datiHome.php?getMaterie", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function VideoFeed() {
       )
       .catch((err) => console.log(err));
 
-    fetch("/php/datiHome.php?getArgomenti", {
+    fetch("./php/datiHome.php?getArgomenti", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

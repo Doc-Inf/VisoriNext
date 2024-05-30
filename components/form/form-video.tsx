@@ -118,7 +118,7 @@ export default function FormVideo({
       body.append("materia", subject);
       body.append("argomento", topic);
 
-      const res = await fetch("/php/createVideo.php", {
+      const res = await fetch("./php/createVideo.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

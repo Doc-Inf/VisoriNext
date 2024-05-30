@@ -11,7 +11,7 @@ export default function Page() {
   useEffect(() => {
     setLoading(true);
 
-    fetch("/php/datiHome.php?getMaterie", {
+    fetch("./php/datiHome.php?getMaterie", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export default function Page() {
       )
       .catch((err) => console.log(err));
 
-    fetch("/php/datiHome.php?getArgomenti", {
+    fetch("./php/datiHome.php?getArgomenti", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
