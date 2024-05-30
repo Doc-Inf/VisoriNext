@@ -29,7 +29,9 @@ export async function POST(req: Request) {
 
     const data = await res.text();
 
-    console.log(data);
+    if (data.split(" ").some((v) => v.startsWith("failure")))
+      return new NextResponse("Forbidden", { status: 403 });
+
     if (res.status === 403)
       return new NextResponse("Forbidden", { status: 403 });
     if (!res.ok)
