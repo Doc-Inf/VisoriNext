@@ -11,16 +11,26 @@ export default function Page() {
   useEffect(() => {
     setLoading(true);
 
-    fetch("api/subjects", {
+    fetch("/php/datiHome.php?getMaterie", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     })
-      .then((res) => res.json().then((subjects) => setSubjs(subjects)))
+      .then((res) =>
+        res
+          .json()
+          .then((subjects) =>
+            setSubjs(
+              subjects.map((s: { nome: string; id: string }) =>
+                s.nome.toLowerCase()
+              )
+            )
+          )
+      )
       .catch((err) => console.log(err));
 
-    fetch("api/topics", {
+    fetch("/php/datiHome.php?getArgomenti", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

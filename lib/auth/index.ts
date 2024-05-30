@@ -8,12 +8,15 @@ export async function login({
   password: string;
 }) {
   // TODO: check for auth
-  const res = await fetch("api/auth", {
+  const body = new URLSearchParams();
+  body.append("email", email);
+  body.append("password", password);
+  const res = await fetch(`/php/auth.php`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify({ email, password }),
+    body: body.toString(),
   });
 
   if (!res.ok && res.status !== 403)
@@ -22,24 +25,14 @@ export async function login({
   const { sessionID, access } = await res.json();
   if (access !== "granted") return new Error("Credenziali non valide");
 
+  if (access === "granted") return sessionID;
+  /* should not be needed in production
   // create token
   // expires in 10 days
   const expires = new Date(Date.now() + 10 * 24 * 60 * 60 * 1000);
 
-  /* with JWT
-  const token = await encryptJWT({
-    user: {
-      nome,
-      cognome,
-      email: emailWS,
-      sessionID,
-    },
-    expires,
-  });
-*/
-
   setCookie("PHPSESSID", sessionID, { expires });
-  return sessionID;
+  return sessionID;*/
 }
 
 export function logout() {

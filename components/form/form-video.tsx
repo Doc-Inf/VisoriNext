@@ -83,13 +83,10 @@ export default function FormVideo({
 
     try {
       // TODO: export to lib
-      const videoRes = await fetch("/api/get-video", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: values.url }),
-      });
+      const videoRes = await fetch(
+        `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${values.url}&key=INSERT_YOUR_API_KEY_HERE`,
+        { method: "GET", headers: { "Content-Type": "application/json" } }
+      );
       const videoData = await videoRes.json();
       const {
         title: titolo,
@@ -105,19 +102,32 @@ export default function FormVideo({
       if (values.author === "") values.author = autore;
       if (values.img === "") values.img = image;
 
-      // TODO: check for auth, create video with values
-      const res: Response = await fetch("/api/create-video", {
+      const body = new URLSearchParams();
+      // @ts-ignore
+      body.append("titolo", values.title);
+      // @ts-ignore
+      body.append("descrizione", values.desc);
+      // @ts-ignore
+      body.append("autore", values.author);
+      // @ts-ignore
+      body.append("durata", values.duration);
+      body.append("lingua", values.lang);
+      // @ts-ignore
+      body.append("image", values.img);
+      body.append("link", values.url);
+      body.append("materia", subject);
+      body.append("argomento", topic);
+
+      const res = await fetch("/php/createVideo.php", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify(values),
+        body: body.toString(),
       });
 
-      if (res.ok) {
-        setSucc("Video creato con successo");
-        form.reset();
-      } else if (res.status === 403) {
+      const data = await res.text();
+      if (data.split(" ").some((v) => v.startsWith("failure"))) {
         setErr("Accedi per creare un video");
         toast({
           variant: "destructive",
@@ -134,19 +144,9 @@ export default function FormVideo({
         throw new Error("Failed to create video with values", {
           cause: values,
         });
-      } else {
-        setErr("Errore nella creazione del video, riprova più tardi");
-        toast({
-          variant: "destructive",
-          title: "Errore nella creazione del video",
-          description: "Impossibile creare il video, riprova più tardi",
-        });
-        throw new Error(
-          "Failed to create video with values, with the following result and values",
-          {
-            cause: { val: values, res: res },
-          }
-        );
+      } else if (res.ok) {
+        setSucc("Video creato con successo");
+        form.reset();
       }
     } catch (e) {
       console.log(e);

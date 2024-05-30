@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import FormError from "@/components/form/state/formError";
 import FormSuccess from "@/components/form/state/formSuccess";
 import FormLoader from "@/components/form/state/formLoader";
-import { decryptJWT } from "@/lib/jwt/";
 import { login } from "@/lib/auth";
 
 export default function LoginForm() {
@@ -114,15 +113,6 @@ export default function LoginForm() {
 
           <Button type="submit" disabled={isPending} className="w-full">
             Accedi
-          </Button>
-          {/*  ⚠️ TODO REMOVE */}
-          <Button
-            type="button"
-            disabled={isPending}
-            onClick={async () => console.log(await decryptJWT())}
-            className="w-full"
-          >
-            ⚠️ SEE CURRENT DECRYPTED JWT
           </Button>
         </form>
       </Form>

@@ -24,12 +24,11 @@ export default function VideoFeed() {
     selected.topic !== "all" &&
       searchParams.append("argomento", selected.topic);
 
-    fetch("api/video-feed", {
-      method: "POST",
+    fetch(`/php/datiHome.php?${searchParams.toString()}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ query: searchParams.toString() }),
     })
       .then((res) =>
         res
@@ -38,18 +37,26 @@ export default function VideoFeed() {
       )
       .catch((err) => console.log(err));
 
-    fetch("api/subjects", {
+    fetch("/php/datiHome.php?getMaterie", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((res) =>
-        res.json().then((subjects) => setSubjs(["all", ...subjects]))
+        res
+          .json()
+          .then((subjects) =>
+            setSubjs(
+              subjects.map((s: { nome: string; id: string }) =>
+                s.nome.toLowerCase()
+              )
+            )
+          )
       )
       .catch((err) => console.log(err));
 
-    fetch("api/topics", {
+    fetch("/php/datiHome.php?getArgomenti", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
