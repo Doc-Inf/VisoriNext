@@ -29,36 +29,21 @@ import TooltipHeader from "../tooltip-header";
 export default function SearchBar({
   subjects,
   topics,
+  selected,
+  setSelected,
 }: {
   subjects: string[];
   topics: Map<string, Set<string>>;
+  selected: { subject: string; topic: string };
+  setSelected: Function;
 }) {
   const [open, setOpen] = useState({ subj: false, topic: false });
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const genQuery = (newParam: string, key: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (newParam !== "all") {
-      params.set(key, newParam);
-    } else {
-      params.delete(key);
-    }
-
-    return params.toString();
-  };
-  const handleRouting = (value: string, from: string) => {
-    const base = "/";
-    const query = genQuery(value, from);
-
-    router.push(`${base}?${query}`, {
-      scroll: false,
-    });
-  };
   return (
     <>
-      <TextLG className="mb-4 text-center">Cerca nella videoteca</TextLG>
+      <TextLG className="mb-8 mt-40 text-center">
+        Cerca video nella videoteca
+      </TextLG>
       <div className="m-auto md:space-x-2 md:items-center md:justify-center md:flex  gap-y-4 md:w-[80%] max-w-screen-md mb-4 grid justify-center">
         <Popover
           open={open.subj}
@@ -71,10 +56,10 @@ export default function SearchBar({
               aria-expanded={open.subj}
               className="w-[250px]  justify-between rounded-xl"
             >
-              {searchParams.get("materia")
+              {selected.subject !== "all"
                 ? (function () {
                     const subj = subjects.find(
-                      (subj) => subj === searchParams.get("materia")
+                      (subj) => subj === selected.subject
                     );
                     return subj && subj[0].toUpperCase() + subj.slice(1);
                   })()
@@ -96,8 +81,8 @@ export default function SearchBar({
                     value={subj}
                     onSelect={(currentValue) => {
                       setOpen({ ...open, subj: false });
-                      if (currentValue === searchParams.get("materia")) return;
-                      handleRouting(currentValue, "materia");
+                      if (currentValue === selected.subject) return;
+                      setSelected({ ...selected, subject: currentValue });
                     }}
                   >
                     {subj === "all"
@@ -106,8 +91,8 @@ export default function SearchBar({
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        searchParams.get("materia") === subj ||
-                          (!searchParams.get("materia") && subj === "all")
+                        selected.subject === subj ||
+                          (selected.subject === "all" && subj === "all")
                           ? "opacity-100"
                           : "opacity-0"
                       )}
@@ -131,17 +116,17 @@ export default function SearchBar({
               aria-expanded={open.topic}
               className="w-[250px] justify-between rounded-xl"
             >
-              {searchParams.get("argomento")
+              {selected.topic !== "all"
                 ? (function () {
-                    const topicSet = topics.get(
-                      searchParams.get("materia") || "all"
-                    );
-                    if (!topicSet) return "Seleziona l'argomento...";
+                    const topicSet = topics.get(selected.subject);
+                    if (!topicSet) return selected.topic;
                     for (const topic of topicSet) {
-                      if (topic === searchParams.get("argomento"))
+                      if (topic === selected.topic)
                         return topic[0].toUpperCase() + topic.slice(1);
                     }
-                    return "Seleziona l'argomento...";
+                    return (
+                      selected.topic[0].toUpperCase() + selected.topic.slice(1)
+                    );
                   })()
                 : "Seleziona l'argomento..."}
               <CaretSortIcon className="w-4 h-4 ml-2 opacity-50 shrink-0" />
@@ -160,24 +145,22 @@ export default function SearchBar({
                     value={"all"}
                     onSelect={() => {
                       setOpen({ ...open, topic: false });
-                      handleRouting("all", "argomento");
+                      setSelected({ ...selected, topic: "all" });
                     }}
                   >
                     Tutti gli argomenti
                     <CheckIcon
                       className={cn(
                         "ml-auto h-4 w-4",
-                        searchParams.get("argomento") === null
-                          ? "opacity-100"
-                          : "opacity-0"
+                        selected.topic === "all" ? "opacity-100" : "opacity-0"
                       )}
                     />
                   </CommandItem>
                 </CommandGroup>
                 {[...topics.keys()].map(
                   (subj) =>
-                    (searchParams.get("materia") === subj ||
-                      searchParams.get("materia") === null) && (
+                    (selected.subject === subj ||
+                      selected.subject === "all") && (
                       <CommandGroup
                         heading={subj[0].toUpperCase() + subj.slice(1)}
                         key={subj}
@@ -189,26 +172,18 @@ export default function SearchBar({
                               value={topic}
                               onSelect={(currentValue) => {
                                 setOpen({ ...open, topic: false });
-                                if (
-                                  currentValue === searchParams.get("argomento")
-                                )
-                                  return;
-                                router.push(
-                                  `/?${new URLSearchParams({
-                                    materia: subj,
-                                    argomento: currentValue,
-                                  }).toString()}`,
-                                  {
-                                    scroll: false,
-                                  }
-                                );
+                                if (currentValue === selected.topic) return;
+                                setSelected({
+                                  subject: subj,
+                                  topic: currentValue,
+                                });
                               }}
                             >
                               {topic[0].toUpperCase() + topic.slice(1)}
                               <CheckIcon
                                 className={cn(
                                   "ml-auto h-4 w-4",
-                                  searchParams.get("argomento") === topic
+                                  selected.topic === topic
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
@@ -228,7 +203,9 @@ export default function SearchBar({
         <TooltipHeader text="Cancella i filtri">
           <Button
             className="rounded-xl"
-            onClick={() => router.push("/", { scroll: false })}
+            onClick={() => {
+              setSelected({ subject: "all", topic: "all" });
+            }}
           >
             <ResetIcon />
           </Button>
