@@ -4,13 +4,13 @@ const LoginSchema = z.object({
   email: z.string().email({
     message: "Email non valida",
   }),
-  password: z.string().min(1, {
+  password: z.string().min(8, {
     message: "Password non valida",
   }),
   code: z.optional(z.string()),
 });
 
-const UserCreateForm = z.object({
+const VideoCreateForm = z.object({
   title: z.optional(z.string()),
   desc: z.optional(z.string()),
   author: z.optional(z.string()),
@@ -26,4 +26,14 @@ const UserCreateForm = z.object({
   topic: z.string().min(1, { message: "Inserisci l'argomento" }),
 });
 
-export { LoginSchema, UserCreateForm };
+const UserCreateForm = z.object({
+  name: z.string().min(1, { message: "Inserisci il nome" }),
+  surname: z.string().min(1, { message: "Inserisci il cognome" }),
+  email: z.string().email({
+    message: "Email non valida",
+  }),
+  password: z.string().min(8, {
+    message: "Password non valida",
+  }),
+});
+export { LoginSchema, VideoCreateForm, UserCreateForm };

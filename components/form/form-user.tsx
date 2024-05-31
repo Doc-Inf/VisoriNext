@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema } from "@/schemas";
+import { UserCreateForm } from "@/schemas";
 import FormWrapper from "@/components/form/form-wrapper";
 import {
   Form,
@@ -17,42 +17,50 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import FormError from "@/components/form/state/formError";
 import FormSuccess from "@/components/form/state/formSuccess";
 import FormLoader from "@/components/form/state/formLoader";
-import { decryptJWT } from "@/lib/jwt/";
-import { login } from "@/lib/auth";
+import { register } from "@/lib/auth";
+import { useToast } from "../ui/use-toast";
 
-export default function LoginForm() {
-  const router = useRouter();
-
+export default function RegisterForm() {
+  const { toast } = useToast();
   const [err, setErr] = useState<string | undefined>("");
   const [succ, setSucc] = useState<string | undefined>("");
   const [isPending, setIsPending] = useState(false);
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof UserCreateForm>>({
+    resolver: zodResolver(UserCreateForm),
     defaultValues: {
+      name: "",
+      surname: "",
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (values: z.infer<typeof UserCreateForm>) => {
     setIsPending(true);
     setErr("");
     setSucc("");
 
     try {
-      const res = await login(values);
+      const res = await register(values);
 
       if (res instanceof Error) {
         setErr(res.message);
+        toast({
+          title: "Errore",
+          description: res.message,
+          variant: "destructive",
+        });
         throw res;
       }
 
-      router.replace("/");
-      router.refresh();
+      form.reset();
+      toast({
+        title: "Utente creato",
+        description: "L&apos;utente è stato creato con successo",
+      });
     } catch (error) {
       // @ts-ignore TODO: fix
       error.message !== "Credenziali non valide" && console.log(error);
@@ -62,11 +70,53 @@ export default function LoginForm() {
 
   return (
     <FormWrapper
-      title="Accedi 🔐"
-      desc="Bentornato, inserisci qui le tue credenziali per accedere al tuo account"
+      title="Crea un nuovo utente 🔐"
+      desc="Bentornato, inserisci qui le tue credenziali per creare un nuovo utente"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="Nome dell'utente"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  Nome dell&apos;utente da creare
+                </FormDescription>
+              </FormItem>
+            )}
+          ></FormField>
+
+          <FormField
+            control={form.control}
+            name="surname"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Cognome</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={isPending}
+                    placeholder="Cognome dell'utente"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  Cognome dell&apos;utente da creare
+                </FormDescription>
+              </FormItem>
+            )}
+          ></FormField>
+
           <FormField
             control={form.control}
             name="email"
@@ -82,7 +132,9 @@ export default function LoginForm() {
                   />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>Email dell&apos;account</FormDescription>
+                <FormDescription>
+                  Email dell&apos;utente da creare
+                </FormDescription>
               </FormItem>
             )}
           ></FormField>
@@ -102,7 +154,9 @@ export default function LoginForm() {
                   />
                 </FormControl>
                 <FormMessage />
-                <FormDescription>Password dell&apos;account</FormDescription>
+                <FormDescription>
+                  Password dell&apos;utente da creare
+                </FormDescription>
               </FormItem>
             )}
           ></FormField>
@@ -112,7 +166,7 @@ export default function LoginForm() {
           <FormLoader loading={isPending} />
 
           <Button type="submit" disabled={isPending} className="w-full">
-            Accedi
+            Crea nuovo utente
           </Button>
         </form>
       </Form>

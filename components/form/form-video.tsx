@@ -1,5 +1,5 @@
 "use client";
-import { UserCreateForm } from "@/schemas";
+import { VideoCreateForm } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -49,8 +49,8 @@ export default function FormVideo({
   const [create, setCreate] = useState({ subj: false, topic: false });
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof UserCreateForm>>({
-    resolver: zodResolver(UserCreateForm),
+  const form = useForm<z.infer<typeof VideoCreateForm>>({
+    resolver: zodResolver(VideoCreateForm),
     defaultValues: {
       title: "",
       desc: "",
@@ -64,7 +64,7 @@ export default function FormVideo({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof UserCreateForm>) => {
+  const onSubmit = async (values: z.infer<typeof VideoCreateForm>) => {
     setIsPending(true);
     setErr("");
     setSucc("");
