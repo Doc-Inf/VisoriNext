@@ -25,13 +25,13 @@ export default function WatchVideo({
   description: string;
 }) {
   return (
-    <DialogContent className="md:w-11/12">
-      <DialogHeader className="max-w-[360px]">
+    <DialogContent className="md:w-[860px]">
+      <DialogHeader className="max-w-[360px] md:max-w-[860px]">
         <DialogTitle>{title}</DialogTitle>
       </DialogHeader>
-      <DialogDescription className="text-foreground">
+      <DialogDescription className="text-foreground max-h-[60vh] overflow-y-scroll">
         {/* VIDEO DESC */}
-        <ScrollArea className="max-w-[360px] max-h-[40vh] overflow-auto">
+        <ScrollArea className="max-w-[360px] md:max-w-[860px]max-h-[30vh] overflow-auto">
           <Par>{description}</Par>
         </ScrollArea>
         <Separator className="my-4" />

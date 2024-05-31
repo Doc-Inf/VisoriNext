@@ -1,4 +1,3 @@
-import { getCookie } from "cookies-next";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { isAuthenticated } from "./auth";
 
@@ -6,10 +5,10 @@ export const config = {
   // all routes
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
   // specific routes to check
-  protectedPHP: ["/php/createVideo.php", "/php/createUser.php"],
-  publicPHP: ["/php/auth.php", "/php/datiHome.php"],
-  protectedRoutes: ["/nuovo-video", "/nuovo-utente"],
-  authRoutes: ["/accedi"],
+  protectedPHP: ["./php/createVideo.php", "./php/createUser.php"],
+  publicPHP: ["./php/auth.php", "./php/datiHome.php"],
+  protectedRoutes: ["./nuovo-video", "./nuovo-utente"],
+  authRoutes: ["./accedi"],
 };
 
 export function middleware({
@@ -32,11 +31,11 @@ export function middleware({
   const isAuthRoute = config.authRoutes.some((item) => pathname.match(item));
 
   if (!isLoggedIn && (isProtectedPHP || isProtectedRoute)) {
-    router.push("/accedi");
+    router.push("./accedi");
     return false;
   }
   if (isAuthRoute && isLoggedIn) {
-    router.push("/");
+    router.push("./");
     return false;
   }
   return config.matcher.some((item) => pathname.match(item)) || isPublicPHP;
