@@ -30,7 +30,7 @@ export default function CopyInput({ link }: { link: string }) {
   };
 
   return (
-    <div className="w-[60%] m-auto relative">
+    <div className="w-[60%] pb-4 m-auto relative">
       <Input
         readOnly
         placeholder="https://youtube.com/..."
