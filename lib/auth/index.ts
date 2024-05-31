@@ -35,6 +35,51 @@ export async function login({
   return sessionID;*/
 }
 
+export async function register({
+  name,
+  surname,
+  email,
+  password,
+}: {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+}) {
+  if (!isAuthenticated())
+    return new Error("Impossibile creare un utente senza essere loggato");
+
+  const body = new URLSearchParams();
+  body.append("nome", name);
+  body.append("cognome", surname);
+  body.append("email", email);
+  body.append("password", password);
+  const res = await fetch("./php/createUser.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: body.toString(),
+  });
+
+  if (!res.ok)
+    return new Error("Impossibile creare l'utente, riprova più tardi");
+
+  const { result, error } = await res.json();
+
+  if (result === "failure") {
+    // should not happend with auth check
+    if (error === "effettuare il login prima")
+      return new Error("Impossibile creare l'utente, effettua il login");
+
+    return new Error("Impossibile creare l'utente, riprova più tardi");
+  }
+
+  if (result === "success") return { result, error };
+
+  return new Error(JSON.stringify({ result, error }));
+}
+
 export function logout() {
   return deleteCookie("PHPSESSID");
 }
