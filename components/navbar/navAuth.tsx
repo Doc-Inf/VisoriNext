@@ -23,42 +23,40 @@ export default function NavAuth() {
       Accedi
     </Link>
   ) : (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <div className="w-[40px] h-[40px] rounded-full bg-primary relative">
-            <div className="absolute w-full text-xl font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-background">
-              D
-            </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <div className="w-[40px] h-[40px] rounded-full bg-primary relative">
+          <div className="absolute w-full text-xl font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-background">
+            D
           </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="*:w-full *:justify-center text-center">
-          <DropdownMenuLabel>Il tuo account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link href="./nuovo-video">Nuovo video</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href="./nuovo-utente">Nuovo utente</Link>
-          </DropdownMenuItem>
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="*:w-full *:justify-center text-center">
+        <DropdownMenuLabel>Il tuo account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <Link href="./nuovo-video">Nuovo video</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="./nuovo-utente">Nuovo utente</Link>
+        </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={() => {
-              logout();
-              toast({
-                title: "Logout effettuato",
-                description: "Sei stato disconnesso",
-              });
-              router.refresh();
-            }}
-            className={buttonVariants({
-              variant: "default",
-            })}
-          >
-            Logout
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+        <DropdownMenuItem
+          onClick={() => {
+            logout();
+            toast({
+              title: "Logout effettuato",
+              description: "Sei stato disconnesso",
+            });
+            router.refresh();
+          }}
+          className={buttonVariants({
+            variant: "default",
+          })}
+        >
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

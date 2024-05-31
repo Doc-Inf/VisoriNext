@@ -47,11 +47,12 @@ export default function VideoFeed() {
         res
           .json()
           .then((subjects) =>
-            setSubjs(
-              subjects.map((s: { nome: string; id: string }) =>
+            setSubjs([
+              "all",
+              ...subjects.map((s: { nome: string; id: string }) =>
                 s.nome.toLowerCase()
-              )
-            )
+              ),
+            ])
           )
       )
       .catch((err) => console.log(err));
