@@ -1,4 +1,3 @@
-import { getCookie } from "cookies-next";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { isAuthenticated } from "./auth";
 
@@ -8,7 +7,12 @@ export const config = {
   // specific routes to check
   protectedPHP: ["/php/createVideo.php", "/php/createUser.php"],
   publicPHP: ["/php/auth.php", "/php/datiHome.php"],
-  protectedRoutes: ["/nuovo-video", "/nuovo-utente", "/rimuovi-video"],
+  protectedRoutes: [
+    "/nuovo-video",
+    "/nuovo-utente",
+    "/rimuovi-video",
+    "/rimuovi-utente",
+  ],
   authRoutes: ["/accedi"],
 };
 

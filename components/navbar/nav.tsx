@@ -25,30 +25,12 @@ export default function Navbar() {
           <TextMD className="text-xl">Videoteca Visori 360</TextMD>
         </Link>
         {/* NAV */}
-        <div className="items-center hidden space-x-2 md:flex">
+        <div className="flex items-center space-x-2">
           <NavAuth />
-        </div>
-        {/* MOBILE */}
-        <div className="flex items-center md:hidden">
-          {/* THEME SWITCH FOR MOBILE */}
-          <div className="md:hidden me-4"></div>
-          <Button className="mobile-menu-button" onClick={handleMenu}>
-            <HamburgerMenuIcon />
-          </Button>
         </div>
       </div>
 
       {/* SM NAV */}
-      <div
-        className={`${
-          menu ? `flex` : `hidden`
-        } flex-col pb-4 mt-4 space-y-4 md:hidden`}
-      >
-        {/* SEARCH BAR AND LOG IN BTNS */}
-        <div className="flex max-w-md m-auto space-x-2">
-          <NavAuth />
-        </div>
-      </div>
     </nav>
   );
 }

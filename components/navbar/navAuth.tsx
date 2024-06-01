@@ -12,9 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { AUTHENTICATED_USER_LINKS } from "@/constants/NAV_LINKS";
+import { Separator } from "../ui/separator";
+import { useState } from "react";
 
 export default function NavAuth() {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const loggedIn = isAuthenticated();
 
@@ -24,7 +28,7 @@ export default function NavAuth() {
     </Link>
   ) : (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger>
           <div className="w-[40px] h-[40px] rounded-full bg-primary relative">
             <div className="absolute w-full text-xl font-bold top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-background">
@@ -35,13 +39,18 @@ export default function NavAuth() {
         <DropdownMenuContent className="*:w-full *:justify-center text-center">
           <DropdownMenuLabel>Il tuo account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link href="/nuovo-video">Nuovo video</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href="/nuovo-utente">Nuovo utente</Link>
-          </DropdownMenuItem>
-
+          {AUTHENTICATED_USER_LINKS.map((category) => (
+            <>
+              {category.map(({ name, href }) => (
+                <DropdownMenuItem key={name}>
+                  <Link href={href} onClick={() => setOpen(false)}>
+                    {name}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+              <Separator />
+            </>
+          ))}
           <DropdownMenuItem
             onClick={() => {
               logout();
@@ -51,9 +60,11 @@ export default function NavAuth() {
               });
               router.refresh();
             }}
-            className={buttonVariants({
-              variant: "default",
-            })}
+            className={
+              buttonVariants({
+                variant: "default",
+              }) + " mt-1"
+            }
           >
             Logout
           </DropdownMenuItem>
