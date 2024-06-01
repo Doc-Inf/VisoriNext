@@ -1,14 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
 import TextLG from "../typhography/textLG";
-import { Button } from "../ui/button";
-import { ChevronDown } from "lucide-react";
 import VideoCard from "./video-card";
 import { ClientVideo } from "@/constants/types";
 import TextMD from "../typhography/textMD";
@@ -33,11 +25,7 @@ export default function Category({
         </div>
         <div className="grid md:grid-cols-[repeat(auto-fill,minmax(360px,1fr))] gap-y-4  m-auto">
           {videos.map((video, idx) => (
-            <VideoCard
-              key={idx}
-              {...video}
-              categories={["Categ 1", "Categ 2"]}
-            />
+            <VideoCard key={idx} {...video} />
           ))}
         </div>
       </motion.div>

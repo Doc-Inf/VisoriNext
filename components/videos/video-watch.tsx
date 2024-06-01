@@ -14,24 +14,30 @@ import { ScrollArea } from "../ui/scroll-area";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "../ui/button";
+import { ClientVideo } from "@/constants/types";
 
 export default function WatchVideo({
   title,
+  author,
   link,
   description,
-}: {
-  title: string;
-  link: string;
-  description: string;
-}) {
+  language,
+}: ClientVideo) {
   return (
     <DialogContent className="md:w-[860px]">
       <DialogHeader className="max-w-[360px] md:max-w-[860px]">
         <DialogTitle>{title}</DialogTitle>
+        <Par className="!mt-4">
+          <span className="font-bold">Canale</span> {author}
+        </Par>
+        <Par>
+          <span className="font-bold">Lingua</span>{" "}
+          {language[0].toUpperCase() + language.slice(1)}
+        </Par>
       </DialogHeader>
-      <DialogDescription className="text-foreground max-h-[60vh] overflow-y-scroll">
+      <DialogDescription className="text-foreground max-h-[60vh] overflow-y-auto">
         {/* VIDEO DESC */}
-        <ScrollArea className="max-w-[360px] md:max-w-[860px] max-h-[30vh] overflow-auto">
+        <ScrollArea className="max-w-[360px] md:max-w-[860px] max-h-[30vh] overflow-y-auto scrollbar-hide">
           <Par>{description}</Par>
         </ScrollArea>
         <Separator className="my-4" />
