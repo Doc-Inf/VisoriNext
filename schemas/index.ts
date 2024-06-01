@@ -36,4 +36,9 @@ const UserCreateForm = z.object({
     message: "Password non valida",
   }),
 });
-export { LoginSchema, VideoCreateForm, UserCreateForm };
+
+const SelectedTableForm = z.object({
+  idx: z.array(z.number()).min(1, { message: "Seleziona almeno un elemento" }),
+});
+
+export { LoginSchema, VideoCreateForm, UserCreateForm, SelectedTableForm };

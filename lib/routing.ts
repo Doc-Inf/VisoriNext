@@ -8,7 +8,7 @@ export const config = {
   // specific routes to check
   protectedPHP: ["/php/createVideo.php", "/php/createUser.php"],
   publicPHP: ["/php/auth.php", "/php/datiHome.php"],
-  protectedRoutes: ["/nuovo-video", "/nuovo-utente"],
+  protectedRoutes: ["/nuovo-video", "/nuovo-utente", "/rimuovi-video"],
   authRoutes: ["/accedi"],
 };
 

@@ -1,53 +1,18 @@
 "use client";
 import FormVideo from "@/components/form/form-video";
+import useSubjectFetching from "@/lib/hooks/useSubjectFetching";
+import useTopicFetching from "@/lib/hooks/useTopicFetching";
 import RouteProvider from "@/lib/providers/route-provider";
-import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [loading, setLoading] = useState(true);
-  const [subjs, setSubjs] = useState<string[]>();
-  const [topics, setTopics] = useState<Map<string, Set<string>>>();
-
-  useEffect(() => {
-    setLoading(true);
-
-    fetch("api/subjects", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json().then((subjects) => setSubjs(subjects)))
-      .catch((err) => console.log(err));
-
-    fetch("api/topics", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) =>
-      res.json().then((data) => {
-        const map = new Map();
-        for (const { nomeArgomento, materia } of data) {
-          const lowerMateria = materia.toLowerCase();
-          const lowerArgomento = nomeArgomento.toLowerCase();
-          if (!map.has(lowerMateria)) {
-            map.set(lowerMateria, new Set([lowerArgomento]));
-            continue;
-          }
-          map.set(lowerMateria, map.get(lowerMateria).add(lowerArgomento));
-        }
-
-        setTopics(map);
-      })
-    );
-    setLoading(false);
-  }, []);
-
+  const { data: subjs, loading: subLoading } = useSubjectFetching();
+  const { data: topics, loading: topLoading } = useTopicFetching();
+  const loading = subLoading || topLoading;
   return (
     <RouteProvider>
       {!loading && subjs && topics && (
-        <FormVideo subjects={subjs} topics={topics} />
+        // remove all subjects from the list
+        <FormVideo subjects={subjs.slice(1)} topics={topics} />
       )}
     </RouteProvider>
   );
