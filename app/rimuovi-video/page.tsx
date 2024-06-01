@@ -9,7 +9,7 @@ export default function DeleteVideoTable() {
 
   return (
     <RouteProvider>
-      <div className="mt-40">
+      <div className="mt-20">
         {!loading && videos && <VideoTable columns={columns} data={videos} />}
       </div>
     </RouteProvider>

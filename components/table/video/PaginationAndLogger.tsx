@@ -30,7 +30,7 @@ export function PaginationAndLogger<TData>({
           .
         </Par>
 
-        <div className="flex items-center justify-end py-4  space-x-2 ">
+        <div className="flex items-center justify-end py-4  space-x-2">
           <Button
             variant="outline"
             size="sm"
@@ -53,7 +53,7 @@ export function PaginationAndLogger<TData>({
         <>
           <Button onClick={() => setOpen(!open)}>Mostra il log</Button>
           {open && (
-            <div className="mt-4 w-fit m-auto pb-20">
+            <div className="pb-20 m-auto mt-4 w-fit">
               <TextMD className="mb-4 text-center">
                 Video rimossi ({logger.success.length})
               </TextMD>
@@ -65,7 +65,7 @@ export function PaginationAndLogger<TData>({
                   </li>
                 ))}
               </ul>
-              <TextMD className="text-center my-4">
+              <TextMD className="my-4 text-center">
                 Errori ({logger.error.length})
               </TextMD>
               <ul>

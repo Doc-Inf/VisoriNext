@@ -41,10 +41,10 @@ export default function SearchBar({
 
   return (
     <>
-      <TextLG className="mb-8 mt-40 text-center">
+      <TextLG className="mt-40 mb-8 text-center">
         Cerca video nella videoteca
       </TextLG>
-      <div className="m-auto md:space-x-2 md:items-center md:justify-center md:flex  gap-y-4 md:w-[80%] max-w-screen-md mb-4 grid justify-center">
+      <div className="m-auto md:space-x-2 md:items-center md:justify-center md:flex  gap-y-4 md:w-[80%] max-w-screen-md grid justify-center">
         <Popover
           open={open.subj}
           onOpenChange={(state: boolean) => setOpen({ ...open, subj: state })}

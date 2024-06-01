@@ -22,7 +22,7 @@ export default function FormWrapper({
   sub,
 }: FormWrapperProps) {
   return (
-    <div className="pb-24 mt-40">
+    <div className="pb-24 mt-12 md:mt-40">
       <Card className="w-[calc(100vw - 4rem)] max-w-screen-md mx-auto">
         <CardHeader>
           <CardTitle className="text-4xl text-center">{title}</CardTitle>
