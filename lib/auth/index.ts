@@ -63,6 +63,33 @@ export async function register({
   return data;
 }
 
+export async function deleteUser({
+  name,
+  surname,
+}: {
+  name: string;
+  surname: string;
+}) {
+  if (!isAuthenticated())
+    return new Error("Impossibile rimuovere un utente senza essere loggato");
+
+  const res = await fetch("api/auth/delete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, surname }),
+  });
+
+  if (res.status === 403)
+    return new Error("Devi essere loggato per rimuovere un utente");
+  if (res.status === 404) return new Error("Utente non trovato");
+  if (!res.ok)
+    return new Error("Impossibile rimuovere un utente, riprova più tardi");
+
+  if (res.status === 200) return true;
+}
+
 export function logout() {
   return deleteCookie("PHPSESSID");
 }

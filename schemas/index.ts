@@ -41,4 +41,15 @@ const SelectedTableForm = z.object({
   idx: z.array(z.number()).min(1, { message: "Seleziona almeno un elemento" }),
 });
 
-export { LoginSchema, VideoCreateForm, UserCreateForm, SelectedTableForm };
+const DeleteUserSchema = z.object({
+  name: z.string().min(1, { message: "Inserisci il nome" }),
+  surname: z.string().min(1, { message: "Inserisci il cognome" }),
+});
+
+export {
+  LoginSchema,
+  VideoCreateForm,
+  UserCreateForm,
+  SelectedTableForm,
+  DeleteUserSchema,
+};
