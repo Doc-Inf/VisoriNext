@@ -5,9 +5,13 @@ export const config = {
   // all routes
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
   // specific routes to check
-  protectedPHP: ["./php/createVideo.php", "./php/createUser.php"],
+  protectedPHP: [
+    "./php/createVideo.php",
+    "./php/createUser.php",
+    "./php/deleteVideo.php",
+  ],
   publicPHP: ["./php/auth.php", "./php/datiHome.php"],
-  protectedRoutes: ["./nuovo-video", "./nuovo-utente"],
+  protectedRoutes: ["./nuovo-video", "./nuovo-utente", "./rimuovi-video"],
   authRoutes: ["./accedi"],
 };
 

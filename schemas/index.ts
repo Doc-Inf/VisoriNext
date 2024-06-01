@@ -4,7 +4,7 @@ const LoginSchema = z.object({
   email: z.string().email({
     message: "Email non valida",
   }),
-  password: z.string().min(1, {
+  password: z.string().min(8, {
     message: "Password non valida",
   }),
   code: z.optional(z.string()),
@@ -36,4 +36,9 @@ const UserCreateForm = z.object({
     message: "Password non valida",
   }),
 });
-export { LoginSchema, VideoCreateForm, UserCreateForm };
+
+const SelectedTableForm = z.object({
+  idx: z.array(z.number()).min(1, { message: "Seleziona almeno un elemento" }),
+});
+
+export { LoginSchema, VideoCreateForm, UserCreateForm, SelectedTableForm };

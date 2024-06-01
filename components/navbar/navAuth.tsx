@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { Separator } from "../ui/separator";
 
 export default function NavAuth() {
   const router = useRouter();
@@ -40,6 +41,10 @@ export default function NavAuth() {
         <DropdownMenuItem>
           <Link href="./nuovo-video">Nuovo video</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="./rimuovi-video">Rimuovi video</Link>
+        </DropdownMenuItem>
+        <Separator />
         <DropdownMenuItem>
           <Link href="./nuovo-utente">Nuovo utente</Link>
         </DropdownMenuItem>

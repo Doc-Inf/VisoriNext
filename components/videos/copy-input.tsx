@@ -6,7 +6,13 @@ import { Copy } from "lucide-react";
 import copy from "clipboard-copy";
 import { useToast } from "../ui/use-toast";
 
-export default function CopyInput({ link }: { link: string }) {
+export default function CopyInput({
+  link,
+  input = true,
+}: {
+  link: string;
+  input?: boolean;
+}) {
   const { toast } = useToast();
   const [isCopied, setIsCopied] = useState(false);
 
@@ -29,7 +35,7 @@ export default function CopyInput({ link }: { link: string }) {
     }
   };
 
-  return (
+  return input ? (
     <div className="w-[60%] pb-4 m-auto relative">
       <Input
         readOnly
@@ -45,5 +51,9 @@ export default function CopyInput({ link }: { link: string }) {
         <Copy />
       </Button>
     </div>
+  ) : (
+    <Button onClick={handleCopy} variant="outline">
+      <Copy className="w-4 h-4" />
+    </Button>
   );
 }
