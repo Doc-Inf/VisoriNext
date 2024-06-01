@@ -1,5 +1,4 @@
-import { Heart, ThumbsDown, ThumbsUp } from "lucide-react";
-import Par from "../typhography/par";
+import { ClientVideo } from "@/constants/types";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -9,20 +8,20 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Badge } from "../ui/badge";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import WatchVideo from "./video-watch";
 import Image from "next/image";
+import Par from "../typhography/par";
 
 export default function VideoCard({
   title,
   description,
+  duration,
+  author,
   link,
   thumbnail,
-  categories,
-}: Record<"title" | "description" | "link" | "thumbnail", string> & {
-  categories: string[];
-}) {
+  language,
+}: ClientVideo) {
   return (
     <Dialog modal={true}>
       <Card className="relative border group bg-card w-[360px] m-auto">
@@ -46,23 +45,14 @@ export default function VideoCard({
               <CardDescription className="mb-4 text-justify text-muted-foreground">
                 {description.split(" ").slice(0, 30).join(" ")}{" "}
               </CardDescription>
-              {/* WATCH AND LIKE */}
-              <div className="flex items-center justify-between mb-0">
+              {/* WATCH BUTTON */}
+              <div className="flex items-center justify-between mb-0 bg-muted/95">
                 <DialogTrigger asChild>
                   <Button>Guarda</Button>
                 </DialogTrigger>
-                <div className="flex space-x-4">
-                  {" "}
-                  {categories.map((category, idx) => (
-                    <Badge
-                      key={idx}
-                      variant="secondary"
-                      className="border border-destructive"
-                    >
-                      {category}
-                    </Badge>
-                  ))}
-                </div>
+                <Par className="!mt-0">
+                  <span className="font-bold">Durata</span> {duration}
+                </Par>
               </div>
             </CardContent>
 
@@ -75,7 +65,9 @@ export default function VideoCard({
           </CardFooter>
         </div>
       </Card>
-      <WatchVideo {...{ title, link, description }} />
+      <WatchVideo
+        {...{ title, link, description, author, language, thumbnail, duration }}
+      />
     </Dialog>
   );
 }

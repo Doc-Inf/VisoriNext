@@ -12,7 +12,15 @@ export interface ServerVideo {
 export interface ClientVideo {
   title: string;
   description: string;
+  author: string;
+  duration: string;
   link: string;
   thumbnail: string;
-  categories: string[];
+  language: string;
+}
+
+// Logger type
+export interface Logger {
+  success: ClientVideo[];
+  error: ClientVideo[];
 }
