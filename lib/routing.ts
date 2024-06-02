@@ -11,7 +11,12 @@ export const config = {
     "./php/deleteVideo.php",
   ],
   publicPHP: ["./php/auth.php", "./php/datiHome.php"],
-  protectedRoutes: ["./nuovo-video", "./nuovo-utente", "./rimuovi-video"],
+  protectedRoutes: [
+    "./nuovo-video",
+    "./nuovo-utente",
+    "./rimuovi-video",
+    "./rimuovi-utente",
+  ],
   authRoutes: ["./accedi"],
 };
 
