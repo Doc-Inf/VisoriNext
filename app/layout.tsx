@@ -24,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="w-full m-auto">
+    <html lang="en" className="w-full m-auto overflow-x-hidden">
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased overflow-x-hidden",

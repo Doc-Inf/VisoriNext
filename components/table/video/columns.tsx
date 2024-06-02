@@ -23,7 +23,7 @@ const Sortable = ({
       onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
     >
       {header}
-      <ArrowUpDown className="ml-2 h-4 w-4" />
+      <ArrowUpDown className="w-4 h-4 ml-2" />
     </Button>
   );
 };

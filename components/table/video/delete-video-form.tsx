@@ -144,11 +144,11 @@ export default function DeleteVideoForm({
           )}
         />
 
-        <div className="flex flex-col-reverse justify-between gap-2  text-sm lg:flex-row lg:items-center text-muted-foreground">
+        <div className="flex flex-col-reverse justify-between text-sm gap-2  lg:flex-row lg:items-center text-muted-foreground">
           <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
               <Button>
-                Rimuovi i video selezionati <Trash2 className="ms-2 h-4 w-4" />
+                Rimuovi i video selezionati <Trash2 className="w-4 h-4 ms-2" />
               </Button>
             </AlertDialogTrigger>
             {table.getFilteredSelectedRowModel().rows.length === 0 ? (
