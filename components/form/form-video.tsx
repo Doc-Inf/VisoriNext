@@ -115,8 +115,8 @@ export default function FormVideo({
       // @ts-ignore
       body.append("image", values.img);
       body.append("link", values.url);
-      body.append("materia", subject);
-      body.append("argomento", topic);
+      body.append("materia", create.subj ? values.subject : subject);
+      body.append("argomento", create.topic ? values.topic : topic);
 
       const res = await fetch("./php/createVideo.php", {
         method: "POST",
