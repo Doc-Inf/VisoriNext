@@ -3,6 +3,7 @@ import Heading from "@/components/hero/heading";
 import VideoFeed from "@/components/hero/video-feed";
 import TextMD from "@/components/typhography/textMD";
 import useHomeFetching from "@/lib/hooks/useHomeFetching";
+import RouteProvider from "@/lib/providers/route-provider";
 import { useState } from "react";
 
 const getQuery = ({ topic, subject }: { subject: string; topic: string }) => {
@@ -21,10 +22,10 @@ export default function Home() {
   const { videos, subjs, topics, loading, error } = useHomeFetching(query);
 
   return (
-    <>
+    <RouteProvider>
       <Heading />
       {!loading && error && (
-        <TextMD className="text-destructive">{error}</TextMD>
+        <TextMD className="text-destructive text-center">{error}</TextMD>
       )}
       {!loading && videos && subjs && topics && (
         <VideoFeed
@@ -36,6 +37,6 @@ export default function Home() {
           loading={loading}
         />
       )}
-    </>
+    </RouteProvider>
   );
 }

@@ -9,6 +9,7 @@ export const config = {
     "./php/createVideo.php",
     "./php/createUser.php",
     "./php/deleteVideo.php",
+    "./php/deleteUser.php",
   ],
   publicPHP: ["./php/auth.php", "./php/datiHome.php"],
   protectedRoutes: [

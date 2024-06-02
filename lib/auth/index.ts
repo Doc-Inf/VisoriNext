@@ -80,6 +80,41 @@ export async function register({
   return new Error(JSON.stringify({ result, error }));
 }
 
+export async function deleteUser({
+  name,
+  surname,
+}: {
+  name: string;
+  surname: string;
+}) {
+  if (!isAuthenticated())
+    return new Error("Impossibile rimuovere un utente senza essere loggato");
+
+  const body = new URLSearchParams();
+  body.append("nome", name);
+  body.append("cognome", surname);
+  const res = await fetch("./php/deleteUser.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: body.toString(),
+  });
+
+  if (!res.ok) return new Error("Errore nella risposta");
+
+  const { result, error } = await res.json();
+  if (error === "user not found" || error === "missing id")
+    return new Error("Utente non trovato");
+
+  if (error === "effettuare prima il login")
+    return new Error("Effettua il login");
+
+  if (result === "success") return true;
+
+  return new Error("Errore nella risposta");
+}
+
 export function logout() {
   return deleteCookie("PHPSESSID");
 }
