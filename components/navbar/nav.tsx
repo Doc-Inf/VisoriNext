@@ -10,7 +10,7 @@ export default function Navbar() {
       {/* CONTAINER */}
       <div className="flex items-center justify-between px-4 py-2 md:px-10 max-max-w-screen-md">
         {/* LOGO */}
-        <Link className="flex items-center space-x-4" href="/">
+        <Link className="flex items-center space-x-4" href="./">
           <Videotape className="text-primary" />
           <TextMD className="text-xl">Videoteca Visori 360</TextMD>
         </Link>
