@@ -23,7 +23,10 @@ export default function NavAuth() {
   const loggedIn = isAuthenticated();
 
   return !loggedIn ? (
-    <Link className={buttonVariants({ variant: "default" })} href="/accedi">
+    <Link
+      className={buttonVariants({ variant: "default" })}
+      href="./accedi.html"
+    >
       Accedi
     </Link>
   ) : (

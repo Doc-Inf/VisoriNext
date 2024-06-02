@@ -63,7 +63,7 @@ export default function DeleteUserForm() {
       if (res === true) {
         toast({
           title: "Utente rimosso",
-          description: `L&apos;utente "${values.name} ${values.surname}" è stato rimosso con successo`,
+          description: `L'utente "${values.name} ${values.surname}" è stato rimosso con successo`,
         });
       }
     } catch (error) {

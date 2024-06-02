@@ -14,7 +14,10 @@ const VideoCreateForm = z.object({
   title: z.optional(z.string()),
   desc: z.optional(z.string()),
   author: z.optional(z.string()),
-  duration: z.string().min(1, { message: "Inserisci la durata" }),
+  duration: z
+    .string()
+    .min(1, { message: "Inserisci la durata" })
+    .time({ message: "Inserisci un tempo valido" }),
   img: z
     .string()
     .url({ message: "Inserisci un url valido" })

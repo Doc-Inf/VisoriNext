@@ -126,28 +126,19 @@ export default function FormVideo({
         body: body.toString(),
       });
 
-      const data = await res.text();
-      if (data.split(" ").some((v) => v.startsWith("failure"))) {
-        setErr("Accedi per creare un video");
-        toast({
-          variant: "destructive",
-          title: "Errore nella creazione del video",
-          description: "Devi essere autenticato per creare un video",
-        });
-      } else if (res.status === 400) {
-        setErr("Impossibile creare un video con i valori inseriti");
-        toast({
-          variant: "destructive",
-          title: "Errore nella creazione del video",
-          description: "Impossibile creare il video, con i valori inseriti",
-        });
-        throw new Error("Failed to create video with values", {
-          cause: values,
-        });
-      } else if (res.ok) {
-        setSucc("Video creato con successo");
-        form.reset();
+      const data = await res.json();
+      if (data.error) {
+        setErr(data.error);
+        setIsPending(false);
+        throw data;
       }
+      console.log(data);
+      setSucc("Video creato con successo");
+      form.reset();
+      toast({
+        title: "Video creato con successo",
+        description: "Il tuo video è stato creato con successo",
+      });
     } catch (e) {
       console.log(e);
     }

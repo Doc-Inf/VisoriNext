@@ -59,7 +59,7 @@ export default function RegisterForm() {
       form.reset();
       toast({
         title: "Utente creato",
-        description: "L&apos;utente è stato creato con successo",
+        description: "L'utente è stato creato con successo",
       });
     } catch (error) {
       // @ts-ignore TODO: fix
