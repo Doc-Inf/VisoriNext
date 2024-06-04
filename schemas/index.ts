@@ -40,19 +40,20 @@ const UserCreateForm = z.object({
   }),
 });
 
-const SelectedTableForm = z.object({
-  idx: z.array(z.number()).min(1, { message: "Seleziona almeno un elemento" }),
-});
-
 const DeleteUserSchema = z.object({
   name: z.string().min(1, { message: "Inserisci il nome" }),
   surname: z.string().min(1, { message: "Inserisci il cognome" }),
+});
+
+const DeleteVideoSchema = z.object({
+  title: z.string().min(1, { message: "Inserisci il titolo" }),
+  author: z.string().min(1, { message: "Inserisci l'autore" }),
 });
 
 export {
   LoginSchema,
   VideoCreateForm,
   UserCreateForm,
-  SelectedTableForm,
   DeleteUserSchema,
+  DeleteVideoSchema,
 };
